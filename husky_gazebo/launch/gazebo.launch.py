@@ -6,6 +6,9 @@ from launch.substitutions import Command, EnvironmentVariable, FindExecutable, L
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
 
+from launch.actions import LogInfo
+
+
 from ament_index_python.packages import get_package_share_directory
 
 from pathlib import Path
@@ -21,6 +24,7 @@ def generate_launch_description():
     gz_resource_path = SetEnvironmentVariable(name='GAZEBO_MODEL_PATH', value=[
                                                 EnvironmentVariable('GAZEBO_MODEL_PATH',
                                                                     default_value=''),
+                                                ':',
                                                 '/usr/share/gazebo-11/models/:',
                                                 str(Path(get_package_share_directory('husky_description')).
                                                     parent.resolve())])
@@ -32,6 +36,8 @@ def generate_launch_description():
     config_husky_velocity_controller = PathJoinSubstitution(
         [FindPackageShare("husky_control"), "config", "control.yaml"]
     )
+
+    lidar_urdf_full_path = "/home/jingshuo/lidar_ws/install/husky_description/share/husky_description/urdf/accessories/husky_3dlidar.urdf.xacro"
 
     # Get URDF via xacro
     robot_description_content = Command(
@@ -45,6 +51,8 @@ def generate_launch_description():
             "name:=husky",
             " ",
             "prefix:=''",
+            " ",
+            "urdf_extras:=", lidar_urdf_full_path, 
             " ",
             "is_sim:=true",
             " ",
@@ -126,10 +134,17 @@ def generate_launch_description():
     ld.add_action(node_robot_state_publisher)
     ld.add_action(spawn_joint_state_broadcaster)
     ld.add_action(diffdrive_controller_spawn_callback)
-    ld.add_action(gzserver)
-    ld.add_action(gzclient)
+    # ld.add_action(gzserver)
+    # ld.add_action(gzclient)
     ld.add_action(spawn_robot)
     ld.add_action(launch_husky_control)
     ld.add_action(launch_husky_teleop_base)
+
+    ld.add_action(LogInfo(
+        msg=["GAZEBO_MODEL_PATH = ",
+            EnvironmentVariable('GAZEBO_MODEL_PATH', default_value='')]
+    ))
+
+    ld.add_action(LogInfo(msg=["Resolved world_path: ", world_path]))
 
     return ld

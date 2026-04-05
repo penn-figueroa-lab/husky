@@ -51,6 +51,9 @@
 
   </xacro:if>
 
+
+  <xacro:include filename="$(find husky_description)/urdf/accessories/husky_rgbdcamera.urdf.xacro"/>
+
   <!-- Optional custom includes. -->
   <xacro:include filename="$(arg urdf_extras)" />
 

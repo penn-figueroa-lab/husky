@@ -1,0 +1,93 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+  <!-- <xacro:arg name="prefix" default="husky_"/> -->
+  <link name="lidar_link">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <cylinder radius="0.04" length="0.06"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <cylinder radius="0.04" length="0.06"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="0.2"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <inertia ixx="0.0002" ixy="0.0" ixz="0.0"
+               iyy="0.0002" iyz="0.0"
+               izz="0.0002"/>
+    </inertial>
+  </link>
+
+  <joint name="lidar_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="lidar_link"/>
+    <origin xyz="0.0 0.0 0.5" rpy="0 0 0"/>
+  </joint>
+
+
+  <gazebo reference="lidar_link">
+    <sensor type="gpu_ray" name="sim_3d_lidar">
+      <pose>0 0 0 0 0 0</pose>
+      <visualize>false</visualize>
+      <update_rate>10</update_rate>
+
+      <ray>
+        <scan>
+          <horizontal>
+            <samples>220</samples>
+            <resolution>1</resolution>
+            <min_angle>-3.142</min_angle>
+            <max_angle>3.142</max_angle>
+          </horizontal>
+          <vertical>
+            <samples>16</samples>
+            <resolution>1</resolution>
+            <min_angle>-0.396</min_angle>
+            <max_angle> 0.747</max_angle>
+          </vertical>
+        </scan>
+
+        <range>
+            <min>0.3</min>
+            <max>8.0</max>
+            <resolution>0.01</resolution>
+        </range>
+
+        <noise>
+            <type>gaussian</type>
+            <mean>0.0</mean>
+            <stddev>0.0</stddev>
+        </noise>
+      </ray>
+
+      <!-- <plugin name="gazebo_ros_laser_controller" filename="libgazebo_ros_velodyne_laser.so">
+        <ros>
+          <namespace>/husky_</namespace>
+          <remapping>~/out:=points</remapping>
+        </ros>
+
+        <frame_name>lidar_link</frame_name>
+        <organize_cloud>false</organize_cloud>
+        <min_range>0.9</min_range>
+        <max_range>8.0</max_range>
+        <gaussian_noise>0.008</gaussian_noise>
+      </plugin> -->
+
+      <plugin name="lidar_plugin" filename="libgazebo_ros_ray_sensor.so">
+        <ros>
+          <namespace>/husky</namespace>
+          <remapping>~/out:=points</remapping>
+        </ros>
+        <output_type>sensor_msgs/PointCloud2</output_type>
+        <frame_name>lidar_link</frame_name>
+      </plugin>
+
+    </sensor>
+  </gazebo>
+
+</robot>
