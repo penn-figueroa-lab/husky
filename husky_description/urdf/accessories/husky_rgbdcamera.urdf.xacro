@@ -40,13 +40,13 @@
   <joint name="front_rgbd_optical_joint" type="fixed">
     <parent link="front_rgbd_frame"/>
     <child link="front_rgbd_optical_frame"/>
-    <origin xyz="0 0 0" rpy="-1.5708 0 0"/>
+    <origin xyz="0 0 0" rpy="-1.5708 0 -1.5708"/>
   </joint>
 
   <gazebo reference="front_rgbd_frame">
     <sensor name="camera" type="depth">
       <pose> 0 0 0 0 0 0 </pose>
-      <update_rate>20</update_rate>
+      <update_rate>10</update_rate>
 
       <camera>
         <horizontal_fov>1.3962634</horizontal_fov>
@@ -57,7 +57,7 @@
         </image>
         <clip>
           <near>0.1</near>
-          <far>3.0</far>
+          <far>5.0</far>
         </clip>
       </camera>
 
