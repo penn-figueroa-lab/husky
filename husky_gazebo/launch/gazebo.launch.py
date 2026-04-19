@@ -107,14 +107,29 @@ def generate_launch_description():
     )
 
     # Spawn robot
+    # spawn_robot = Node(
+    #     package='gazebo_ros',
+    #     executable='spawn_entity.py',
+    #     name='spawn_husky',
+    #     arguments=['-entity',
+    #                'husky',
+    #                '-topic',
+    #                'robot_description'],
+    #     output='screen',
+    # )
+    
     spawn_robot = Node(
         package='gazebo_ros',
         executable='spawn_entity.py',
         name='spawn_husky',
-        arguments=['-entity',
-                   'husky',
-                   '-topic',
-                   'robot_description'],
+        arguments=[
+            '-entity', 'husky',
+            '-topic', 'robot_description',
+            '-x', '0.0',
+            '-y', '0.0',
+            '-z', '0.2',
+            '-Y', '0.0'
+        ],
         output='screen',
     )
 
