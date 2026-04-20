@@ -37,8 +37,14 @@ def generate_launch_description():
         [FindPackageShare("husky_control"), "config", "control.yaml"]
     )
 
-    lidar_urdf_full_path = "/home/jingshuo/lidar_ws/install/husky_description/share/husky_description/urdf/accessories/husky_3dlidar.urdf.xacro"
-
+    # lidar_urdf_full_path = "/home/jingshuo/lidar_ws/install/husky_description/share/husky_description/urdf/accessories/husky_3dlidar.urdf.xacro"
+    lidar_urdf_full_path = PathJoinSubstitution([
+        FindPackageShare("husky_description"),
+        "urdf",
+        "accessories",
+        "husky_3dlidar.urdf.xacro"
+    ])
+    
     # Get URDF via xacro
     robot_description_content = Command(
         [
@@ -126,7 +132,7 @@ def generate_launch_description():
             '-entity', 'husky',
             '-topic', 'robot_description',
             '-x', '0.0',
-            '-y', '0.0',
+            '-y', '10.0',
             '-z', '0.2',
             '-Y', '0.0'
         ],
